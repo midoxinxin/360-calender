@@ -67,6 +67,8 @@ var w_fes = new Array(
 "0520 母亲节", "0630 父亲节");
 
 
+
+
 var today = new Date();
 var tY = today.getFullYear();
 var tM = today.getMonth();
@@ -83,6 +85,26 @@ var sw = 0;
 var cnt = 0;
 
 var dStyle;
+
+
+
+
+
+// 时钟clock
+setInterval("oTime()",1000);
+function oTime() {
+   today = new Date();
+   var hou = today.getHours();
+   var min=today.getMinutes(); //分
+   var sec =today.getSeconds(); //秒
+   if(sec<10)
+      var sec ="0"+sec;
+   if(min<10)
+      var min= "0"+min;
+   if(hou<10)
+      var hou = "0"+hou;
+   clock.innerHTML = '<span id="oTime">'+hou+':'+min+':'+sec+'</span>';
+}
 
 
 //返回农历第y年的总天数
@@ -174,26 +196,25 @@ function cyclical(num) {
    return(day_gan[num%10]+day_zhi[num%12])
 }
 
-function cal_ele(sy,s_m,s_d,week,lYear,lMonth,lDay,isLeap,cYear,cMonth,calDay) {
+function cal_ele(sy,s_m,s_d,week,lYear,l_m,l_d,isLeap,c_y,c_m,cal_d) {
 
+      this.color      = '';
+      this.lunar_festival = '';
+      this.solar_festival = '';
+      this.solarTerms    = '';
       this.istoday    = false;
       this.sy         = sy;
       this.s_m        = s_m;
       this.s_d        = s_d;
       this.week       = week;
       this.lYear      = lYear;
-      this.lMonth     = lMonth;
-      this.lDay       = lDay;
+      this.l_m        = l_m;
+      this.l_d        = l_d;
       this.isLeap     = isLeap;
-      this.cYear      = cYear;
-      this.cMonth     = cMonth;
-      this.calDay       = calDay;
+      this.c_y        = c_y;
+      this.c_m        = c_m;
+      this.cal_d      = cal_d;
 
-      this.color      = '';
-
-      this.lunarFestival = '';
-      this.solarFestival = '';
-      this.solarTerms    = '';
 
 }
 
@@ -204,77 +225,77 @@ function sTerm(y,n) {
 }
 
 function calendar(y,m) {
+   var lunar_dpos = new Array(3)
+   var solor_dobj, lunar_dobj, lY, lM, lD=1, lL, lX=0, t_1, t_2
+  
+   var n = 0,first_lunarm = 0
 
-   var sDObj, lDObj, lY, lM, lD=1, lL, lX=0, tmp1, tmp2
-   var lDPOS = new Array(3)
-   var n = 0
-   var firstLM = 0
-
-   sDObj = new Date(y,m,1)
+   solor_dobj = new Date(y,m,1)
 
    this.length    = solar_day(y,m)
-   this.firstWeek = sDObj.getDay()
+   this.firstWeek = solor_dobj.getDay()
 
 
    for(var i=0;i<this.length;i++) {
 
       if(lD>lX) {
-         sDObj = new Date(y,m,i+1)
-         lDObj = new Lunar(sDObj)
-         lY    = lDObj.year
-         lM    = lDObj.month
-         lD    = lDObj.day
-         lL    = lDObj.isLeap
+         solor_dobj = new Date(y,m,i+1)
+         lunar_dobj = new Lunar(solor_dobj)
+         lY    = lunar_dobj.year
+         lM    = lunar_dobj.month
+         lD    = lunar_dobj.day
+         lL    = lunar_dobj.isLeap
          lX    = lL? lunar_leap(lY): lunar_leap_d(lY,lM)
 
-         if(n==0) firstLM = lM
-         lDPOS[n++] = i-lD+1
+         if(n==0) first_lunarm = lM
+         lunar_dpos[n++] = i-lD+1
       }
 
       this[i] = new cal_ele(y, m+1, i+1, n_str1[(i+this.firstWeek)%7],
                                lY, lM, lD++, lL,
-                               cyclical(lDObj.yearCyl) ,cyclical(lDObj.monCyl), cyclical(lDObj.dayCyl++) )
+                               cyclical(lunar_dobj.yearCyl) ,cyclical(lunar_dobj.monCyl), cyclical(lunar_dobj.dayCyl++) )
 
 
       if((i+this.firstWeek)%7==0)   this[i].color = '#FF5F07'
       if((i+this.firstWeek)%14==13) this[i].color = '#FF5F07'
    }
 
-   tmp1=sTerm(y,m*2  )-1
-   tmp2=sTerm(y,m*2+1)-1
-   this[tmp1].solarTerms = solar_term[m*2]
-   this[tmp2].solarTerms = solar_term[m*2+1]
-   if(m==3) this[tmp1].color = '#FF5F07'
+   t_1=sTerm(y,m*2  )-1
+   t_2=sTerm(y,m*2+1)-1
+   this[t_1].solarTerms = solar_term[m*2]
+   this[t_2].solarTerms = solar_term[m*2+1]
+   if(m==3) this[t_1].color = '#FF5F07'
 
-   for(i in solar_fes)
-      if(solar_fes[i].match(/^(\d{2})(\d{2})([\s\*])(.+)$/))
-         if(Number(RegExp.$1)==(m+1)) {
-         var fes = isLeg(RegExp.$4, y);
-         if(fes == "") continue;
-            this[Number(RegExp.$2)-1].solarFestival += fes + ' '
-            if(RegExp.$3=='*') this[Number(RegExp.$2)-1].color = '#FF5F07'
-         }
+
 
    for(i in w_fes)
       if(w_fes[i].match(/^(\d{2})(\d)(\d)([\s\*])(.+)$/))
          if(Number(RegExp.$1)==(m+1)) {
-            tmp1=Number(RegExp.$2)
-            tmp2=Number(RegExp.$3)
-            this[((this.firstWeek>tmp2)?7:0) + 7*(tmp1-1) + tmp2 - this.firstWeek].solarFestival += RegExp.$5 + ' '
+            t_1=Number(RegExp.$2)
+            t_2=Number(RegExp.$3)
+            this[((this.firstWeek>t_2)?7:0) + 7*(t_1-1) + t_2 - this.firstWeek].solar_festival += RegExp.$5 + ' '
          }
 
    for(i in lunar_fes)
       if(lunar_fes[i].match(/^(\d{2})(.{2})([\s\*])(.+)$/)) {
-         tmp1=Number(RegExp.$1)-firstLM
-         if(tmp1==-11) tmp1=1
-         if(tmp1 >=0 && tmp1<n) {
-            tmp2 = lDPOS[tmp1] + Number(RegExp.$2) -1
-            if( tmp2 >= 0 && tmp2<this.length) {
-               this[tmp2].lunarFestival += RegExp.$4 + ' '
-               if(RegExp.$3=='*') this[tmp2].color = '#FF5F07'
+         t_1=Number(RegExp.$1)-first_lunarm
+         if(t_1==-11) t_1=1
+         if(t_1 >=0 && t_1<n) {
+            t_2 = lunar_dpos[t_1] + Number(RegExp.$2) -1
+            if( t_2 >= 0 && t_2<this.length) {
+               this[t_2].lunar_festival += RegExp.$4 + ' '
+               if(RegExp.$3=='*') this[t_2].color = '#FF5F07'
             }
          }
       }
+         for(i in solar_fes)
+      if(solar_fes[i].match(/^(\d{2})(\d{2})([\s\*])(.+)$/))
+         if(Number(RegExp.$1)==(m+1)) {
+         var fes = isLeg(RegExp.$4, y);
+         if(fes == "") continue;
+            this[Number(RegExp.$2)-1].solar_festival += fes + ' '
+            if(RegExp.$3=='*') this[Number(RegExp.$2)-1].color = '#FF5F07'
+         }
 
 
    if(y==tY && m==tM) {
@@ -284,7 +305,7 @@ function calendar(y,m) {
 
 }
 
-function calDay(d){
+function cal_d(d){
         var s0;
         if(d==10)     {s0 = '初十';}
         else if(d==20){s0 = '二十';}
@@ -402,18 +423,18 @@ function setCld(SY,SM) {
 
          solar_obj.style.color = cld[sD].color;
 
-         if(cld[sD].lDay==1)
-            lunar_obj.innerHTML = '<b>'+(cld[sD].isLeap?'闰':'') + cld[sD].lMonth + '月' + (lunar_leap_d(cld[sD].lYear,cld[sD].lMonth)==29?'小':'大')+'</b>';
+         if(cld[sD].l_d==1)
+            lunar_obj.innerHTML = '<b>'+(cld[sD].isLeap?'闰':'') + cld[sD].l_m + '月' + (lunar_leap_d(cld[sD].lYear,cld[sD].l_m)==29?'小':'大')+'</b>';
          else
-            lunar_obj.innerHTML = calDay(cld[sD].lDay);
+            lunar_obj.innerHTML = cal_d(cld[sD].l_d);
 
-         s=cld[sD].lunarFestival;
+         s=cld[sD].lunar_festival;
          if(s.length>0) {
             if(s.length>5) s = s.substr(0, 3)+'…';
         
          }
          else {
-            s=cld[sD].solarFestival;
+            s=cld[sD].solar_festival;
             if(s.length>0) {
                size = (s.charCodeAt(0)>0 && s.charCodeAt(0)<128)?8:4;
                if(s.length>size+1) s = s.substr(0, size-1)+'…';
@@ -479,14 +500,16 @@ function addDay(v) {
    if(solar_obj.innerHTML!='') {
      
       solar_obj.style.cursor = 'pointer';
-         fes = '<table><tr><td>'+'<span><b>'+cld[d].solarTerms + ' ' + cld[d].solarFestival + ' ' + cld[d].lunarFestival+'</b></span></td>'+
-         '</tr></table>';
+      fes = '<table><tr><td>'+'<span><b>'+cld[d].solarTerms + ' ' + cld[d].solar_festival + ' ' + cld[d].lunar_festival+'</b></span></td>'+
+                 '</tr></table>';
+         
          day_detal= 
                   '<table class="detallu"><tr><td>' +'<table><tr><td><span>'+ cld[d].sy+'-'+cld[d].s_m+'-'+cld[d].s_d+' 星期'+cld[d].week+'<br>'+
                   '<p style="font-family:courier;font-size: 54px;margin-right: -215%;margin-bottom: 52%;">'+cld[d].s_d+'</p>'+
-                  '<span style=" float: right;margin-top: -86%;font-size: 13px;">'+ fes +'农历'+(cld[d].isLeap?'闰 ':' ')+cld[d].lMonth+' 月 '+cld[d].lDay+' 日</span><br>'+
-                  '<span style="float: right;margin-top: -71%;font-size: 13px;">'+cld[d].cYear+'年 '+cld[d].cMonth+'月 '+cld[d].calDay + '日</span>'
+                  '<span style=" float: right;margin-top: -86%;font-size: 13px;">'+ fes +'农历'+(cld[d].isLeap?'闰 ':' ')+cld[d].l_m+' 月 '+cld[d].l_d+' 日</span><br>'+
+                  '<span style="float: right;margin-top: -71%;font-size: 13px;">'+cld[d].c_y+'年 '+cld[d].c_m+'月 '+cld[d].cal_d + '日</span>'
                   '</td></tr></table>';
+             
 
       date_content.innerHTML = day_detal;
 
@@ -517,20 +540,7 @@ function getCookie(Name) {
    }
 }
 
-setInterval("oTime()",1000);
-function oTime() {
-   today = new Date();
-   var hou = today.getHours();
-   var min=today.getMinutes(); //分
-   var sec =today.getSeconds(); //秒
-   if(sec<10)
-      var sec ="0"+sec;
-   if(min<10)
-      var min= "0"+min;
-   if(hou<10)
-      var hou = "0"+hou;
-   clock.innerHTML = '<span id="oTime">'+hou+':'+min+':'+sec+'</span>';
-}
+
 
 function initial() {
    dStyle = detail.style;

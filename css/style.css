@@ -2,42 +2,15 @@
   font-family:courier;
 }
 #content{
-    width: 350px;
-    margin: 0 auto;
+    width: 350px;margin: 0 auto;
 
 }
 .smlb {
-    font-size: 20px;
-    color: white;
-    float: right;
-    margin-right: 13%;
-    margin-top: -54%;
+    font-size: 20px; color: white; float: right; margin-right: 13%; margin-top: -54%;
 }
-.unnamed1 {
-   font-weight: lighter; font-size: 16px; color: #0099ff; font-family: "宋体"
-}
-.agreen {
-   font-weight: bold; font-size: 20px; color: #bccc45; font-family: "arial", "helvetica", "sans-serif"
-}
-
 
 .aorange {
    font-weight: bold; font-size: 20px; color: #ff5f07; width:57px;
-}
-.agreen {
-   font-weight: bold; font-size: 20px; color: #44d7cf; 
-}
-.zorange {
-   font-size: 12px; color: #ff5f07
-}
-
-
-.zgreen {
-   font-size: 12px; color: #a8cc33
-}
-
-.bottom {
-   border-right: #a5a9aa 1px solid; background-position: center 50%; border-top: #a5a9aa 1px solid; font-size: 12px; border-left: #a5a9aa 1px solid; width: 66px; color: #000000; border-bottom: #a5a9aa 1px solid; height: 27px; background-color: #e8f5f9
 }
 .day {
    font-size: 18px; color: #000000; 
@@ -61,36 +34,23 @@
    font-weight: bold; font-size: 14px; color: #0099ff
 }
 
-.todyacolor {
-   background-color: aqua
-}
 
 #cal-content{
-   height:40;
-   text-align: center;
-   background-color:"#FAFBFB";
+   height:40;text-align: center;background-color:"#FAFBFB";
 
 }
 .detallu{
-   width:100%;
-    border:0; 
-    padding:2px;
-    color: white;
+   width:100%; border:0; padding:2px; color: white;
    
 }
 .lnotice{
   margin-top: 34%;
 }
 #detail{
-   margin-top: 31px;
-   text-align: center;
-   background-color: #2EBEB7;
-   
+   margin-top: 31px;text-align: center;background-color: #2EBEB7;
 }
 #oTime{
-  color: white ;
-  text-align: center;
-  font-family: 
+  color: white ;text-align: center;font-family: 
 }
 
 .sm span{
@@ -102,11 +62,8 @@
 
 }
 #clock{
-    font-family: courier;
-    margin-top: -23%;
-    padding-bottom: 5%;
+    font-family: courier;margin-top: -23%;padding-bottom: 5%;
   }
-
 
 
 
@@ -123,23 +80,10 @@ select::-ms-expand { display: none; }
   background-color:#2EBEB7;
 }
 .day td{
-  width:57px;
-  color:white; 
-  text-align:center;
-
+  width:57px;color:white; text-align:center;
 }
 select {
-  
-    margin-bottom: 9px;
-    appearance: none;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    border: 0;
-    border-radius: 2px;
-    color: #2EBEB7;
-    padding-top: 6px;
-    background-color: white;
-    padding-bottom: 2px;
+  margin-bottom: 9px; appearance: none;-moz-appearance: none;-webkit-appearance: none;border: 0; border-radius: 2px; color: #2EBEB7; padding-top: 6px; background-color: white; padding-bottom: 2px;
 }
 
 
@@ -147,13 +91,9 @@ select {
 /*日历头部*/
 
 .table_head{
-    background-color: #2EBEB7;
-    width: 347px;
-    margin-left: -2px;
-    text-align: center;
+    background-color: #2EBEB7;width: 347px;margin-left: -2px;text-align: center;
   }
 
 .week{
-  
-    border-spacing: 0;   
+   border-spacing: 0;   
 }
